@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2026 RiftWii contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Every pull request: the site's own links resolve, and files are of a type
+# and size the site serves. The script runs from the base branch, so a pull
+# request can't change the check it is judged by.
+name: check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out the check (base branch)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+      - name: Check out the pull request
+        uses: actions/checkout@v4
+        with:
+          path: pr
+          persist-credentials: false
+      - name: Check the site
+        run: python3 -I base/scripts/check_site.py pr/site
