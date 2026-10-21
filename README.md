@@ -1,6 +1,6 @@
 # riftwii.github.io
 
-RiftWii's website: the home page, tutorials and credits, served by GitHub Pages at **https://riftwii.github.io/**. The community themes live in their own repository, [RiftWii/themes](https://github.com/RiftWii/themes), and are served under the same address at https://riftwii.github.io/themes/.
+RiftWii's website: the home page, the Themes page (`site/themes.html`), tutorials and credits, served by GitHub Pages at **https://riftwii.github.io/**. The community themes live in their own repository, [RiftWii/themes](https://github.com/RiftWii/themes), and are served under the same address at https://riftwii.github.io/themes/ (just `themes.json`, previews and zips; the page people browse is this site's https://riftwii.github.io/themes.html, which reads `themes.json` from there).
 
 The code is in [KakarottoCake/Riftwii](https://github.com/KakarottoCake/Riftwii).
 
@@ -21,7 +21,7 @@ Open `site/index.html` in a browser, or serve the folder locally:
 python3 -m http.server -d site 8000
 ```
 
-Then open http://localhost:8000/. Run the check before you push:
+Then open http://localhost:8000/. The Themes page reads `/themes/themes.json` from the same server when opened on localhost, so to see cards locally put a copy of the published `themes.json` (with its previews and zips) in a folder and serve it at `/themes/`. Run the check before you push:
 
 ```bash
 python3 scripts/check_site.py site
