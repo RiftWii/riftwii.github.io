@@ -1,0 +1,225 @@
+<!-- SPDX-FileCopyrightText: 2026 RiftWii contributors -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Themes - RiftWii</title>
+    <meta name="description" content="Menu themes for RiftWii, the Wii mod loader. Download one for your SD card, or make your own.">
+    <link rel="stylesheet" href="css/style.css?v=20261021-4">
+
+    <meta property="og:title" content="RiftWii Themes">
+    <meta
+        property="og:description"
+        content="Menu themes for RiftWii, the Wii mod loader. Download one for your SD card, or make your own."
+    >
+    <meta property="og:type" content="website">
+    <meta
+        property="og:image"
+        content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+    >
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RiftWii Themes">
+    <meta
+        name="twitter:description"
+        content="Menu themes for RiftWii, the Wii mod loader. Download one for your SD card, or make your own."
+    >
+    <meta
+        name="twitter:image"
+        content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+    >
+    <link
+        rel="icon"
+        type="image/png"
+        href="https://github.com/KakarottoCake/Riftwii/blob/main/hbc/icon.png?raw=true"
+    >
+</head>
+<!-- "loaded" from the start: this page has no title intro, so the navigation bar and the panels are there at once. -->
+<body class="loaded themes-page">
+    <div class="background">
+        <div class="haze-main"></div>
+        <div class="mist haze-1"></div>
+        <div class="mist haze-2"></div>
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <aside class="tbar delayed-ui" id="tbar" aria-label="Primary navigation">
+        <button
+            class="tbar-toggle"
+            id="tbarToggle"
+            type="button"
+            aria-label="Hide navigation"
+            aria-expanded="true"
+        >
+            <span class="tbar-arrow">‹</span>
+        </button>
+
+        <div class="tbar-brand">RIFTWII<span class="tbar-brand-extra"> NAVI</span></div>
+
+        <button
+            class="tbar-menu-button"
+            id="navMenuButton"
+            type="button"
+            aria-label="Menu"
+            aria-expanded="false"
+            aria-controls="navPanel"
+        >
+            <span class="tbar-menu-icon" aria-hidden="true"></span>
+            <span class="tbar-menu-text">Menu</span>
+        </button>
+
+        <nav class="tbar-links" id="navPanel" aria-label="Sections">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#download">Download</a>
+            <a class="active" href="themes.html" aria-current="page">Themes</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#tutorials">Tutorials</a>
+            <a href="index.html#socials">Socials</a>
+            <a href="index.html#credits">Credits</a>
+
+            <button
+                class="tbar-motion-toggle"
+                id="motionToggle"
+                type="button"
+                aria-pressed="false"
+            >
+                Animations: On
+            </button>
+        </nav>
+    </aside>
+    <div class="nav-scrim" id="navScrim" aria-hidden="true"></div>
+
+    <main class="page-content">
+        <section class="page-section themes-top" id="top">
+            <div class="content-shell">
+                <article class="content-box intro-box section-box reveal-box">
+                    <span class="box-kicker">RIFTWII</span>
+                    <h1>Themes for your RiftWii menu</h1>
+                    <p>
+                        Give RiftWii a new look: its colors, tiles, background, music and sounds. Each theme here was made by the community and checked before it was added. All of them are free to download and share.
+                    </p>
+                    <div class="themes-actions">
+                        <a class="download-button" href="#themes">Browse themes</a>
+                        <a class="download-button" href="#make">Make your own</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-section" id="themes">
+            <div class="content-shell">
+                <article class="content-box section-box reveal-box">
+                    <span class="box-kicker">THEMES</span>
+                    <h2>Pick a theme</h2>
+                    <p id="count">Loading the list…</p>
+
+                    <div class="tutorial-browser">
+                        <div class="tutorial-search-wrap">
+                            <input
+                                class="tutorial-search"
+                                id="themeSearch"
+                                type="search"
+                                placeholder="Search by name or author"
+                                aria-label="Search themes"
+                                hidden
+                            >
+                        </div>
+                        <div id="themeList" aria-live="polite"></div>
+                    </div>
+
+                    <p class="themes-note">
+                        Something wrong with a theme?
+                        <a href="https://github.com/RiftWii/themes/issues/new?template=takedown.md" target="_blank" rel="noopener noreferrer">Report it</a>.
+                        The list itself is
+                        <a href="https://riftwii.github.io/themes/themes.json">themes.json</a>.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-section" id="install">
+            <div class="content-shell">
+                <article class="content-box section-box reveal-box">
+                    <span class="box-kicker">INSTALL</span>
+                    <h2>Installing a theme</h2>
+                    <p>You need the SD card RiftWii runs from and a computer that can open zip files.</p>
+
+                    <div class="theme-steps">
+                        <div class="theme-step">
+                            <h3>Download</h3>
+                            <p>Pick a theme above and download its zip.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Copy to the SD card</h3>
+                            <p>Unzip it into <code>sd:/riftwii/themes/</code>. The zip already holds the theme's folder, so you end up with <code>sd:/riftwii/themes/&lt;name&gt;/theme.ini</code>.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Choose it</h3>
+                            <p>On the Wii, open RiftWii, go to <strong>Settings &gt; Menu &gt; Theme</strong> and step to the new theme. RiftWii offers to restart its menu to show it.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-section" id="make">
+            <div class="content-shell">
+                <article class="content-box section-box reveal-box">
+                    <span class="box-kicker">MAKE YOUR OWN</span>
+                    <h2>Make your own</h2>
+                    <p>
+                        A theme is a small folder: a <code>theme.ini</code> with its colors and shape, plus any pictures, music or sounds you want to replace. RiftWii's
+                        <a href="https://github.com/KakarottoCake/Riftwii/blob/main/docs/THEMES.md" target="_blank" rel="noopener noreferrer">theme guide</a>
+                        lists every picture and its exact size, and its theme kit can paint the pictures in your colors.
+                    </p>
+
+                    <div class="theme-steps">
+                        <div class="theme-step">
+                            <h3>Build and try it</h3>
+                            <p>Put your folder in <code>sd:/riftwii/themes/</code> and test it on your Wii, or in Dolphin.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Add a LICENSE</h3>
+                            <p>Choose CC BY 4.0, CC BY-SA 4.0 or CC0, and credit anything you used from someone else.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Open a pull request</h3>
+                            <p>Add your folder under <code>themes/</code> in <a href="https://github.com/RiftWii/themes" target="_blank" rel="noopener noreferrer">RiftWii/themes</a>. The automatic check tells you straight away if anything needs fixing.</p>
+                        </div>
+                    </div>
+
+                    <div class="theme-rules" aria-label="The rules in short">
+                        <div class="theme-rule">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                            <p>Only artwork, music and fonts you made yourself, or have permission to share.</p>
+                        </div>
+                        <div class="theme-rule">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+                            <p>No Nintendo material: no ripped Wii Menu music, sounds, icons or fonts.</p>
+                        </div>
+                        <div class="theme-rule">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-1.5zM8 7h6"/></svg>
+                            <p>Every theme is free to share under its Creative Commons license. <a href="https://github.com/RiftWii/themes/blob/main/CONTENT-RULES.md" target="_blank" rel="noopener noreferrer">Read the full rules</a>.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-main">
+                <span class="footer-label">Website by</span>
+                <span class="footer-author">Ｄｉａ！♪～☆</span>
+            </div>
+            <div class="footer-year">
+                RiftWii 2026 · Not affiliated with Nintendo
+            </div>
+        </div>
+    </footer>
+
+    <script src="java/script.js?v=20261021-4"></script>
+</body>
+</html>

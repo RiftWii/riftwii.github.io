@@ -4,6 +4,11 @@ if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
 }
 
+// A link from another page (the Themes page's "Features", say) arrives as
+// index.html#features. The page always starts at the top for its intro, so
+// the section is remembered here and scrolled to once the intro is over.
+const requestedSectionId = decodeURIComponent(window.location.hash.slice(1));
+
 if (window.location.hash) {
     history.replaceState(
         null,
@@ -254,6 +259,12 @@ const sections = ["home", "download", "features", "tutorials", "socials", "credi
     .filter(Boolean);
 
 function setActiveSection(sectionId) {
+    // The Themes page has no sections (its links go to the home page), and
+    // its own link is marked in the HTML, so there is nothing to highlight.
+    if (!sections.length) {
+        return;
+    }
+
     navLinks.forEach((link) => {
         link.classList.toggle(
             "active",
@@ -384,6 +395,10 @@ navLinks.forEach((link) => {
 });
 
 function updateScrollSpy() {
+    if (!sections.length) {
+        return;
+    }
+
     if (!document.body.classList.contains("loaded")) {
         setActiveSection("home");
         return;
@@ -1102,9 +1117,22 @@ function finishIntro() {
     document.body.classList.remove("page-locked");
     startBoxReveals();
     updateScrollSpy();
+
+    const requestedSection = requestedSectionId
+        ? document.getElementById(requestedSectionId)
+        : null;
+
+    if (requestedSection) {
+        requestedSection.scrollIntoView({ behavior: "instant", block: "start" });
+    }
 }
 
-const introTimer = setTimeout(finishIntro, reducedMotionQuery.matches ? 0 : INTRO_MS);
+// A page that is already "loaded" in its HTML (the Themes page) has no title
+// intro to wait for.
+const introTimer = setTimeout(
+    finishIntro,
+    reducedMotionQuery.matches || document.body.classList.contains("loaded") ? 0 : INTRO_MS
+);
 
 ["pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
     window.addEventListener(
@@ -1695,3 +1723,164 @@ if (motionToggle) {
         setReducedMotion(!reduced);
     });
 }
+
+
+// The Themes page: fills the theme list from themes.json. The themes live in
+// their own repository (RiftWii/themes), which GitHub serves under this same
+// address, at /themes/, so the list and every picture and zip in it are
+// same-origin. Every value from the file is put in with textContent or
+// checked URLs, never as HTML.
+(function () {
+    "use strict";
+
+    const list = document.getElementById("themeList");
+    const count = document.getElementById("count");
+    const search = document.getElementById("themeSearch");
+
+    if (!list || !count || !search) {
+        return;
+    }
+
+    // Opened from this computer (a local copy of the site, to work on the
+    // page), /themes/ is looked for next to the page instead.
+    const localPreview = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+    const themesJsonUrl = localPreview
+        ? location.origin + "/themes/themes.json"
+        : "https://riftwii.github.io/themes/themes.json";
+
+    let themes = [];
+
+    function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+    }
+
+    // Only links into this site are used, so a bad entry can't point
+    // a download or an image somewhere else.
+    function ownUrl(value) {
+        try {
+            const url = new URL(value, themesJsonUrl);
+            return url.origin === location.origin ? url.href : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function formatSize(bytes) {
+        if (!(bytes >= 0)) return "";
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function licenseLabel(id) {
+        const names = { "CC0-1.0": "CC0", "CC-BY-4.0": "CC BY 4.0", "CC-BY-SA-4.0": "CC BY-SA 4.0" };
+        return names[id] || id || "";
+    }
+
+    function card(theme) {
+        const article = el("article", "theme-card");
+
+        const preview = el("div", "theme-preview");
+        const previewUrl = theme.preview ? ownUrl(theme.preview) : null;
+        if (previewUrl) {
+            const img = el("img");
+            img.src = previewUrl;
+            img.alt = "Preview of " + (theme.name || theme.folder);
+            img.loading = "lazy";
+            preview.appendChild(img);
+        } else {
+            preview.appendChild(el("span", "theme-no-preview", "No preview yet"));
+        }
+        article.appendChild(preview);
+
+        const body = el("div", "theme-card-body");
+        body.appendChild(el("h3", null, theme.name || theme.folder));
+        if (theme.author) body.appendChild(el("p", "theme-by", "by " + theme.author));
+
+        const tags = el("div", "theme-tags");
+        if (theme.license) tags.appendChild(el("span", "theme-tag", licenseLabel(theme.license)));
+        if (theme.has_music) tags.appendChild(el("span", "theme-tag", "Music"));
+        if (theme.size) tags.appendChild(el("span", "theme-tag", formatSize(theme.size)));
+        body.appendChild(tags);
+
+        const zipUrl = ownUrl(theme.zip);
+        if (zipUrl) {
+            const download = el("a", "download-button theme-download", "Download");
+            download.href = zipUrl;
+            download.setAttribute("download", "");
+            body.appendChild(download);
+        }
+        if (theme.sha256) {
+            // Tucked away: only people checking a download by hand want it.
+            const details = el("details", "theme-hash");
+            details.appendChild(el("summary", null, "Checksum"));
+            details.appendChild(el("p", null, "SHA-256 " + theme.sha256));
+            body.appendChild(details);
+        }
+
+        article.appendChild(body);
+        return article;
+    }
+
+    function emptyState() {
+        const box = el("div", "theme-empty");
+        box.appendChild(el("h3", null, "No themes yet"));
+        box.appendChild(el("p", null, "This collection has only just opened. Make the first theme, and it will appear here as soon as it's merged."));
+        const make = el("a", "download-button", "Make the first theme");
+        make.href = "#make";
+        box.appendChild(make);
+        return box;
+    }
+
+    function render() {
+        const query = search.value.trim().toLowerCase();
+        const shown = themes.filter((theme) => {
+            if (!query) return true;
+            return ((theme.name || "") + " " + (theme.author || "") + " " + (theme.folder || ""))
+                .toLowerCase().includes(query);
+        });
+
+        list.textContent = "";
+        if (themes.length === 0) {
+            count.textContent = "Themes appear here as soon as they're added.";
+            list.appendChild(emptyState());
+            return;
+        }
+        count.textContent = themes.length === 1 ? "1 theme to choose from." : themes.length + " themes to choose from.";
+        if (shown.length === 0) {
+            list.appendChild(el("p", "theme-status", "No theme matches \u201c" + search.value.trim() + "\u201d."));
+            return;
+        }
+        const grid = el("div", "theme-grid");
+        shown.forEach((theme) => grid.appendChild(card(theme)));
+        list.appendChild(grid);
+    }
+
+    fetch(themesJsonUrl, { cache: "no-cache" })
+        .then((response) => {
+            if (!response.ok) throw new Error(response.status);
+            return response.json();
+        })
+        .then((index) => {
+            themes = Array.isArray(index.themes) ? index.themes.slice() : [];
+            themes.sort((a, b) =>
+                (a.name || a.folder || "").localeCompare(b.name || b.folder || "")
+            );
+            search.hidden = themes.length < 2;
+            render();
+        })
+        .catch(() => {
+            count.textContent = "";
+            list.textContent = "";
+            const message = el("p", "theme-status", "The theme list didn't load. ");
+            const link = el("a", null, "Open themes.json");
+            link.href = themesJsonUrl;
+            message.appendChild(link);
+            list.appendChild(message);
+        });
+
+    search.addEventListener("input", render);
+})();
