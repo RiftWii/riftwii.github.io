@@ -3,12 +3,12 @@
 # Main Features:
 
 - Loads Riivolution-format packs without a disc
-- Big mods (CTGPR 1.02, REX, P+) work without launchers (CTGPR 1.03 still experimental)
+- Big mods (CTGPR 1.02, REX, P+) work without launchers (CTGPR 1.03 does not work from RiftWii yet)
 - Play from SD, USB, with FAT32 or NTFS
 
 # Game Management:
 
-- Saves can be kept seperately on the SD Card
+- Saves can be kept separately on the SD Card
 - Per game settings with support of cheats, video modes, and more!
 - Online Play: Wiimmfi, WFC, AltWFC, or your own server
 
