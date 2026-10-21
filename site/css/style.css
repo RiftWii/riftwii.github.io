@@ -2173,6 +2173,9 @@ body.loaded:not(.tbar-collapsed) .page-content {
     width: 100%;
     margin-top: 26px;
     overflow: hidden;
+    /* Rows keep their content's height while the grid's height is pinned for
+       the open/close animation, instead of stretching to fill it. */
+    align-content: start;
     transition: height 0.52s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -2630,6 +2633,8 @@ body.mouse-down * {
     margin-top: 26px;
 
     overflow: hidden;
+
+    align-content: start;
 
     transition:
         height 0.5s

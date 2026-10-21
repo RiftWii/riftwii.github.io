@@ -898,6 +898,31 @@ scanTutorials();
 
 
 
+// The Features and Credits grids animate their height by pinning it to
+// pixels. A grid with a pinned height stretches its rows to fill it, so the
+// boxes that stay after a collapse used to grow tall (and scrollHeight, read
+// while they were stretched, returned the old height, so the section never
+// shrank until it snapped). The grids therefore use align-content: start, and
+// the new height is measured with the height set back to auto.
+function prefersReducedMotion() {
+    return (
+        reducedMotionQuery.matches ||
+        document.body.classList.contains("reduced-motion")
+    );
+}
+
+function naturalHeight(element, pinnedHeight) {
+    element.style.height = "auto";
+    const height = element.getBoundingClientRect().height;
+    element.style.height = `${pinnedHeight}px`;
+
+    // Reading the layout makes the pinned height apply before the next change
+    // to it, so the transition starts from there.
+    element.getBoundingClientRect();
+
+    return height;
+}
+
 const featuresGrid = document.getElementById("featuresGrid");
 const featuresToggle = document.getElementById("featuresToggle");
 
@@ -1002,6 +1027,10 @@ function renderFeatures(animate = true) {
         ? featureSections
         : featureSections.slice(0, 2);
 
+    if (prefersReducedMotion()) {
+        animate = false;
+    }
+
     if (!animate) {
         drawFeatureGroups(visibleSections, false);
         featuresGrid.style.height = "auto";
@@ -1024,7 +1053,7 @@ function renderFeatures(animate = true) {
             drawFeatureGroups(visibleSections, true);
 
             const newHeight =
-                featuresGrid.scrollHeight;
+                naturalHeight(featuresGrid, oldHeight);
 
             requestAnimationFrame(() => {
                 featuresGrid.style.height =
@@ -1436,6 +1465,10 @@ function renderCredits(
             );
 
 
+    if (prefersReducedMotion()) {
+        animate = false;
+    }
+
     const oldHeight =
         creditsGrid
             .getBoundingClientRect()
@@ -1549,8 +1582,10 @@ function renderCredits(
 
 
                 const newHeight =
-                    creditsGrid
-                        .scrollHeight;
+                    naturalHeight(
+                        creditsGrid,
+                        oldHeight
+                    );
 
 
                 requestAnimationFrame(
