@@ -1,0 +1,279 @@
+<!-- SPDX-FileCopyrightText: 2026 RiftWii contributors -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+<title>Getting Started - RiftWii</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/tutorials.css?v=20261016-7"
+    >
+    <link
+    rel="icon"
+    type="image/png"
+    href="https://github.com/KakarottoCake/Riftwii/blob/main/hbc/icon.png?raw=true"
+
+
+
+    >
+    <meta property="og:title" content="RiftWii Tutorials">
+
+<meta
+    property="og:description"
+    content="Guides and tutorials for installing and using RiftWii."
+>
+
+<meta property="og:type" content="website">
+
+<meta
+    property="og:image"
+    content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+>
+
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="twitter:title" content="RiftWii Tutorials">
+
+<meta
+    name="twitter:description"
+    content="Guides and tutorials for installing and using RiftWii."
+>
+
+<meta
+    name="twitter:image"
+    content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+>
+</head>
+
+<body>
+    <main class="tutorial-page">
+
+        <a
+            class="back-link"
+            href="../index.html#tutorials"
+        >
+            ← Back to RiftWii
+        </a>
+
+        <article class="tutorial-card">
+
+            <span class="kicker">
+                RIFTWII TUTORIAL
+            </span>
+
+            <h1>
+                Getting Started
+            </h1>
+
+            <p>
+                A simple introduction to installing
+                and opening RiftWii.
+            </p>
+
+            <a
+                class="link-button guide-link-button"
+                href="https://github.com/KakarottoCake/Riftwii/blob/main/docs/GUIDE.md#what-you-need"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Read the official Getting Started guide
+            </a>
+
+
+            <div class="placeholder-step">
+                <strong>
+                    Requirements
+                </strong>
+
+                <p>
+                    - A Wii, or a Wii U in Wii mode, with
+                    the Homebrew Channel
+                    <br>
+                    - An SD Card that is formatted
+                    to FAT32
+                    <br>
+                    - A USB Drive formatted to FAT32, NTFS,
+                    or as a WBFS drive by a WBFS manager (Optional)
+                    <br>
+                    - A computer or device to
+                    download RiftWii
+                    <br>
+                    - To play games from the SD Card or a USB Drive
+                    (<code>.wbfs</code>, <code>.iso</code> or <code>.rvz</code>), a
+                    d2x cIOS, v11 beta3 or newer, installed in slot 249, 250 or 251
+                    (<a href="https://wii.hacks.guide/cios" target="_blank" rel="noopener noreferrer">wii.hacks.guide/cios</a>).
+                    Discs need nothing.
+                </p>
+
+            </div>
+
+            <div class="placeholder-step">
+                <strong>
+                    Step 1
+                </strong>
+
+                <p>
+                    Download the zip file from the Github.
+                </p>
+
+                            <a
+                                class="download-button release-button"
+                                id="stableReleaseLink"
+                                href="https://github.com/KakarottoCake/Riftwii/releases/latest"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Latest Version of RiftWii
+                            </a>
+                            <br>
+                
+
+            </div>
+
+            <div class="placeholder-step">
+                <strong>
+                    Step 2
+                </strong>
+
+                <p>
+                    Copy the contents of the
+                    <code>sd-card</code>
+                    folder onto the root of your
+                    SD Card. It should look like:
+                </p>
+
+                <pre class="file-tree"><code>SD Card
+├── apps/
+│   ├── riftwii/
+│   └── riftwii_channel/
+├── games/
+├── riftwii/
+│   └── themes/
+├── riivolution/
+└── wbfs/</code></pre>
+
+                <p>
+                    If you have a USB Drive, also copy
+                    the contents of
+                    <code>usb-drive</code>
+                    onto your USB Drive. It should look like:
+                </p>
+
+                <pre class="file-tree"><code>USB Drive
+├── games/
+└── wbfs/</code></pre>
+            </div>
+
+
+
+
+
+
+            <div class="placeholder-step">
+                <strong>
+                    GameCube Games
+                </strong>
+
+                <p>
+                    RiftWii plays GameCube games too. Put each game in a folder of its own in
+                    <code>sd:/games</code> or <code>usb:/games</code>, for example:
+                </p>
+
+                <pre class="file-tree"><code>sd:/games/Super Mario Sunshine [GMSE01]/game.iso</code></pre>
+
+                <p>
+                    A GameCube image left loose in <code>games</code>, or put in
+                    <code>wbfs</code>, is not listed. <code>.ciso</code> images are not
+                    supported: convert them to ISO or RVZ in Dolphin first.
+                </p>
+
+                <a
+                    class="link-button guide-link-button"
+                    href="https://github.com/KakarottoCake/Riftwii/blob/main/docs/GUIDE.md#gamecube-games"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Read the official GameCube games guide
+                </a>
+            </div>
+
+            <div class="placeholder-step">
+                <strong>
+                    Installing Mods
+                </strong>
+
+                <p>
+                    Now that RiftWii is all setup, you're ready to install mods!
+                </p>
+                <br>
+
+
+<a class="link-button" href="installing-mods.html#riivolution-format">
+    Install Riivolution-format Mods
+</a>
+<br>
+<a class="link-button" href="installing-mods.html#gecko-code-builds">
+    Install Code Mods (Project+, REX, etc.)
+</a>
+<br>
+<a class="link-button" href="installing-mods.html#cheat-codes">
+    Install Cheats
+</a>
+            </div>
+            <div class="placeholder-step">
+                <strong>
+                    Launching RiftWii
+                </strong>
+
+                <p>
+                    RiftWii is all setup now! You can now launch it via the Homebrew Channel!
+                </p>
+
+                <img
+                    class="tutorial-image"
+                    src="resources/lfhbc.png"
+                    alt="hbc rift"
+                >
+
+
+</a>
+
+                
+            </div>
+            <div class="placeholder-step">
+                <strong>
+                    Load RiftWii from the Wii Menu
+                </strong>
+
+                <p>
+                    Simply open the RiftWii Channel Installer, and press A to install!
+                </p>
+                
+                <img
+                    class="tutorial-image"
+                    src="resources/channelinstaller.png"
+                    alt="hbc rift"
+                >
+                <p>All Done!</p>
+                <img
+                    class="tutorial-image"
+                    src="https://github.com/KakarottoCake/Riftwii/blob/main/docs/screenshots/2610-406-channels.png?raw=true"
+                    alt="RiftWii current widescreen home screen"
+                >
+                
+
+            </div>
+
+
+        </article>
+    </main>
+</body>
+
+</html>
