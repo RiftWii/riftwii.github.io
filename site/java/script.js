@@ -19,8 +19,13 @@ if (window.location.hash) {
 
 window.scrollTo(0, 0);
 
-window.addEventListener("pageshow", () => {
-    window.scrollTo(0, 0);
+window.addEventListener("pageshow", (event) => {
+    // A page restored from the back/forward cache stays as it was, already
+    // loaded. A fresh load starts at the top for its intro, but not once the
+    // intro is over: a skipped intro has already scrolled to its #section.
+    if (!event.persisted && !introFinished) {
+        window.scrollTo(0, 0);
+    }
 });
 
 const starsContainer = document.getElementById("stars");

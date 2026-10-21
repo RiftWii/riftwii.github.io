@@ -42,6 +42,32 @@
 >
 </head>
 <body class="page-locked">
+    <script>
+        // The title intro plays once per visit (per browser tab session). Any
+        // later load of this page starts in the loaded state, before the first
+        // paint, so the splash never flashes. The flag is set as soon as the
+        // intro starts, so skipping it or leaving early still counts.
+        (function () {
+            var seen = false;
+            try {
+                seen = window.sessionStorage.getItem("riftwiiIntroShown") === "1";
+                if (!seen) {
+                    window.sessionStorage.setItem("riftwiiIntroShown", "1");
+                }
+            } catch (error) {
+                // Storage is blocked: a visitor who came from another page of
+                // this site has already seen the intro.
+                try {
+                    seen = document.referrer.indexOf(window.location.origin + "/") === 0;
+                } catch (referrerError) {
+                    seen = false;
+                }
+            }
+            if (seen) {
+                document.body.className = "loaded";
+            }
+        })();
+    </script>
     <div class="background">
         <div class="haze-main"></div>
         <div class="mist haze-1"></div>
@@ -451,5 +477,5 @@
     </div>
 </footer>
 
-    <script src="java/script.js?v=20261021-4"></script></body>
+    <script src="java/script.js?v=20261021-5"></script></body>
 </html>
