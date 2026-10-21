@@ -3,7 +3,7 @@
 
 # RiftWii website
 
-The GitHub Pages website is currently kept in the `gitpage/` directory for testing.
+The GitHub Pages website is currently kept in the `site/` directory.
 
 ## Preview locally
 
@@ -11,7 +11,7 @@ The website can be previewed locally before publishing.
 
 ### Windows
 
-From inside the `gitpage/` folder, run:
+From the repository root, run:
 
 ```text
 open-site.bat
@@ -21,7 +21,7 @@ This starts the local web server and opens the website in your browser.
 
 ### Python
 
-From inside the `gitpage/` folder, run:
+From the repository root, run:
 
 ```text
 python serve.py
