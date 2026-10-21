@@ -3518,3 +3518,30 @@ body.reduced-motion .tutorial-list {
         padding-top: 52px !important;
     }
 }
+
+/* The tutorial toolbar's single column was "1fr", which cannot shrink below
+   its widest content; the sort button's 165px minimum pushed the whole page
+   wider than a phone. */
+@media (max-width: 720px) {
+    .tutorial-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tutorial-sort-button {
+        min-width: 0;
+    }
+
+    /* Hidden, the sort control would still keep its row (and a gap) under the
+       search box; closed it takes no height. */
+    .tutorial-sort-wrap.tutorial-sort-hidden {
+        height: 0;
+    }
+}
+
+/* The title's orbit ring is drawn wider than the screen on a phone. Clipping
+   it at the page edge stops the browser from widening the page to fit it
+   (which also shrank everything else and made the page scroll sideways; on a
+   desktop window it added a sideways scroll bar). */
+html body .page-content {
+    overflow-x: clip;
+}
