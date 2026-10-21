@@ -4332,3 +4332,58 @@ html body .page-content {
         padding-bottom: clamp(12px, 2.5vh, 28px);
     }
 }
+
+/* ------------------------------------------------------------------
+   Side bar in short windows (above 900px wide)
+
+   The side bar is about 690px tall at its normal size, so in a window
+   shorter than that its last rows (Credits, Animations) were cut off below
+   the window edge. Up to 740px tall everything in it scales with the window
+   height, down to 32px rows and 13px text; the bar stays centred. Where even
+   that does not fit (under about 400px tall) the bar is capped to the window
+   and the link list scrolls inside it, with the title still showing. Taller
+   windows and the phone and tablet bar (900px and below) are untouched.
+   "html body" selectors and !important beat the older overlapping rules
+   above, as in the block before this one.
+   ------------------------------------------------------------------ */
+@media (min-width: 901px) and (max-height: 740px) {
+    html body #tbar.tbar {
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        max-height: calc(100vh - 24px) !important;
+        max-height: calc(100dvh - 24px) !important;
+        padding: clamp(10px, 3.2vh, 24px) clamp(10px, 2.4vh, 18px) !important;
+        border-radius: clamp(14px, 3vh, 22px) !important;
+    }
+
+    html body .tbar-brand {
+        flex: 0 0 auto !important;
+        margin: 0 8px clamp(8px, 3vh, 22px) !important;
+        font-size: clamp(0.85rem, 3.2vh, 1.5rem) !important;
+        line-height: 1.2 !important;
+    }
+
+    html body .tbar-links {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        gap: clamp(3px, 1vh, 8px) !important;
+        padding: 2px 6px 2px 2px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(126, 210, 255, 0.35) transparent !important;
+    }
+
+    html body .tbar-links a,
+    html body .tbar-motion-toggle {
+        flex: 0 0 auto !important;
+        box-sizing: border-box !important;
+        min-height: 32px !important;
+        padding: clamp(6px, 2vh, 15px) clamp(10px, 2vh, 18px) !important;
+        font-size: clamp(0.82rem, 3.1vh, clamp(1rem, 2vw, 1.45rem)) !important;
+        line-height: 1.15 !important;
+        border-radius: clamp(9px, 1.8vh, 13px) !important;
+    }
+}
