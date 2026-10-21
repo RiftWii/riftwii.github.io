@@ -249,7 +249,7 @@ if (riftwii) {
 const tbar = document.getElementById("tbar");
 const tbarToggle = document.getElementById("tbarToggle");
 const navLinks = [...document.querySelectorAll(".tbar-links a[data-section]")];
-const sections = ["home", "features", "tutorials", "download", "socials", "credits"]
+const sections = ["home", "download", "features", "tutorials", "socials", "credits"]
     .map((id) => document.getElementById(id))
     .filter(Boolean);
 
