@@ -3494,3 +3494,27 @@ body.reduced-motion .tutorial-list {
 
     outline: none;
 }
+
+/* Below 900px the bar sits in the page (sticky, above): room under it for
+   the toggle tab that hangs below it, which otherwise covered the top of
+   the hero. Collapsed, the bar leaves the page's flow (fixed, slid up), so
+   the content moves up instead of keeping an empty space where the bar
+   was; the padding keeps it clear of the tab that is still showing. */
+@media (max-width: 900px) {
+    body.loaded:not(.tbar-collapsed) .tbar,
+    body.reduced-motion.loaded:not(.tbar-collapsed) .tbar {
+        margin-bottom: 36px !important;
+    }
+
+    body.loaded.tbar-collapsed .tbar,
+    body.reduced-motion.loaded.tbar-collapsed .tbar {
+        position: fixed !important;
+        left: 8px !important;
+        right: 8px !important;
+        margin: 0 !important;
+    }
+
+    body.loaded.tbar-collapsed .page-content {
+        padding-top: 52px !important;
+    }
+}
