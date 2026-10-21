@@ -1000,12 +1000,38 @@ if (featuresToggle) {
 
 loadFeaturesMarkdown();
 
-setTimeout(() => {
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+// The title intro lasts about a second and a half. Any tap, key press, click
+// or scroll attempt skips the rest of it, and it is skipped altogether when
+// the device asks for reduced motion, so nobody waits to start reading.
+const INTRO_MS = 1500;
+let introFinished = false;
+
+function finishIntro() {
+    if (introFinished) {
+        return;
+    }
+
+    introFinished = true;
     document.body.classList.add("loaded");
     document.body.classList.remove("page-locked");
     startBoxReveals();
     updateScrollSpy();
-}, 2000);
+}
+
+const introTimer = setTimeout(finishIntro, reducedMotionQuery.matches ? 0 : INTRO_MS);
+
+["pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
+    window.addEventListener(
+        eventName,
+        () => {
+            clearTimeout(introTimer);
+            finishIntro();
+        },
+        { once: true, passive: true }
+    );
+});
 
 
 
