@@ -1,10 +1,16 @@
 # SPDX-FileCopyrightText: 2026 RiftWii contributors
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+SITE_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "site")
 
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=SITE_FOLDER, **kwargs)
+
     def end_headers(self):
         self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
         self.send_header("Pragma", "no-cache")
