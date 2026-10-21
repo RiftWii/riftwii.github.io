@@ -3984,3 +3984,90 @@ html body .page-content {
     }
 
 }
+
+/* ------------------------------------------------------------------
+   Desktop hero and first screen (above 900px)
+
+   Same idea as on phones: the first block is subtext under the logo, not a
+   panel of its own, and the hero shrinks with the window's height so the
+   Download heading and its button stay on the first screen of a short desktop
+   window (down to about 1000x511) as well as a tall one. Sizes are clamps of
+   vh, so a 1440x900 screen keeps a large logo. This block is last and uses
+   "html body" selectors to win over the older rules above.
+   ------------------------------------------------------------------ */
+@media (min-width: 901px) {
+    html body .hero,
+    html body.loaded .hero {
+        padding-top: clamp(14px, 4.5vh, 56px) !important;
+        padding-bottom: 0 !important;
+    }
+
+    html body .welcome {
+        margin-bottom: clamp(2px, 1vh, 12px);
+        font-size: clamp(0.7rem, 2.2vh, 1.2rem);
+    }
+
+    html body .riftwii {
+        font-size: clamp(2rem, 8.5vh, 5.5rem);
+    }
+
+    html body .mod-loader {
+        margin-top: clamp(6px, 2.2vh, 22px);
+        font-size: clamp(0.62rem, 1.8vh, 1rem);
+    }
+
+    html body .hero-intro,
+    html body .hero-intro.box-visible {
+        margin: clamp(6px, 1.8vh, 18px) auto 0;
+        padding: 0 6px;
+        width: min(40em, 100%);
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        text-align: center;
+    }
+
+    html body .hero-intro::before,
+    html body .hero-intro::after {
+        display: none;
+    }
+
+    html body .hero-intro .box-kicker {
+        display: none;
+    }
+
+    html body .hero-intro h2 {
+        margin: 0 0 clamp(2px, 0.6vh, 6px);
+        font-size: clamp(0.9rem, 2.6vh, 1.25rem);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.3;
+    }
+
+    html body .hero-intro p {
+        margin: 0;
+        font-size: clamp(0.75rem, 1.9vh, 0.95rem);
+        line-height: 1.45;
+        text-wrap: balance;
+        color: rgba(215, 232, 255, 0.68);
+    }
+
+    /* Download sits right under the intro, not centred in a tall section. */
+    html body #download {
+        min-height: 0;
+    }
+
+    html body #download .content-shell,
+    html body.loaded #download .content-shell {
+        padding-top: clamp(4px, 1.5vh, 14px);
+        padding-bottom: 40px;
+    }
+
+    html body #download .content-box {
+        padding-top: clamp(12px, 2.5vh, 28px);
+        padding-bottom: clamp(12px, 2.5vh, 28px);
+    }
+}
