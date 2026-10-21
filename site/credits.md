@@ -7,7 +7,7 @@ ishtar.png
 mc
 
 # JackW
-Contributor
+Developer
 jackw.png
 mc
 
