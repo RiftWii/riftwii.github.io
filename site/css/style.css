@@ -4146,4 +4146,96 @@ html body .page-content {
     .theme-card-body {
         padding: 14px;
     }
+
+/* ------------------------------------------------------------------
+   Phone hero and first screen (900px and below)
+
+   On a phone the first block is subtext under the logo, not a panel of its
+   own: the tagline as a short line under MOD LOADER and the sentence as small
+   muted text, with the box kicker (a second "RIFTWII") left out. The hero is
+   smaller and the Download banner comes after the version and its button, so
+   the Download heading and button are on the first screen of a phone (about
+   412x690 visible) without scrolling. This block is last and uses "html body"
+   selectors to win over the older rules above.
+   ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+    html body .hero,
+    html body.loaded .hero {
+        padding-top: 10px !important;
+        padding-bottom: 0 !important;
+    }
+
+    html body .welcome {
+        margin-bottom: 6px;
+        font-size: 0.8rem;
+    }
+
+    html body .riftwii {
+        font-size: 2.1rem;
+    }
+
+    html body .mod-loader {
+        margin-top: 10px;
+        font-size: 0.72rem;
+    }
+
+    html body .hero-intro,
+    html body .hero-intro.box-visible {
+        margin: 8px auto 0;
+        padding: 0 6px;
+        max-width: 34em;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        text-align: center;
+    }
+
+    html body .hero-intro::before,
+    html body .hero-intro::after {
+        display: none;
+    }
+
+    html body .hero-intro .box-kicker {
+        display: none;
+    }
+
+    html body .hero-intro h2 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.3;
+    }
+
+    html body .hero-intro p {
+        margin: 0;
+        font-size: 0.82rem;
+        line-height: 1.45;
+        text-wrap: balance;
+        color: rgba(215, 232, 255, 0.68);
+    }
+
+    /* The banner comes after the version and the button. */
+    html body #download .content-shell {
+        padding-top: 4px;
+        padding-bottom: 20px;
+    }
+
+    html body #download .content-box {
+        display: flex;
+        flex-direction: column;
+        padding: 14px 16px 16px;
+    }
+
+    html body #download .box-kicker {
+        margin-bottom: 4px;
+    }
+
+    html body #download .release-grid {
+        order: 1;
+    }
+
 }
