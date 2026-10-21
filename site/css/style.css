@@ -3983,8 +3983,4 @@ html body .page-content {
         order: 1;
     }
 
-    html body #download .placeholder-image {
-        order: 2;
-        margin: 14px 0 0;
-    }
 }
