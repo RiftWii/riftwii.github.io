@@ -3518,3 +3518,255 @@ body.reduced-motion .tutorial-list {
         padding-top: 52px !important;
     }
 }
+
+/* ------------------------------------------------------------------
+   Phone and tablet navigation (900px and below)
+
+   A slim fixed bar (name and a Menu button) that opens the links as a panel.
+   This block comes last and uses "html body" selectors so it wins over the
+   older overlapping rules above, which also use !important. At 901px and
+   wider none of it applies and the side bar is untouched.
+   ------------------------------------------------------------------ */
+.tbar-menu-button,
+.nav-scrim {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    html {
+        scroll-padding-top: 64px;
+    }
+
+    html body #tbar.tbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: auto !important;
+        height: 52px !important;
+        margin: 0 !important;
+        padding: 0 8px 0 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        border-width: 0 0 1px 0 !important;
+        border-radius: 0 !important;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        overflow: visible !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    html body.nav-hidden #tbar.tbar {
+        transform: translateY(-100%) !important;
+    }
+
+    html body .tbar-toggle,
+    html body #tbarToggle {
+        display: none !important;
+    }
+
+    html body .tbar-brand {
+        display: block !important;
+        margin: 0 !important;
+        font-size: 1.15rem !important;
+        letter-spacing: 0.2em !important;
+    }
+
+    html body .tbar-brand-extra {
+        display: none;
+    }
+
+    html body .tbar-menu-button {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 10px;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0 14px;
+        border: 1px solid rgba(126, 210, 255, 0.28);
+        border-radius: 12px;
+        background: rgba(15, 15, 55, 0.7);
+        color: #c6f4ff;
+        font: inherit;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    html body .tbar-menu-button:hover,
+    html body .tbar-menu-button:focus-visible,
+    html body.nav-open .tbar-menu-button {
+        color: white;
+        background: rgba(60, 90, 190, 0.45);
+    }
+
+    html body .tbar-menu-button:focus-visible,
+    html body .tbar-links a:focus-visible,
+    html body .tbar-motion-toggle:focus-visible {
+        outline: 2px solid #9feaff;
+        outline-offset: 2px;
+    }
+
+    /* Three bars that become a cross while the menu is open. */
+    .tbar-menu-icon,
+    .tbar-menu-icon::before,
+    .tbar-menu-icon::after {
+        display: block;
+        width: 18px;
+        height: 2px;
+        border-radius: 1px;
+        background: currentColor;
+        transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .tbar-menu-icon {
+        position: relative;
+    }
+
+    .tbar-menu-icon::before,
+    .tbar-menu-icon::after {
+        content: "";
+        position: absolute;
+        left: 0;
+    }
+
+    .tbar-menu-icon::before {
+        top: -6px;
+    }
+
+    .tbar-menu-icon::after {
+        top: 6px;
+    }
+
+    body.nav-open .tbar-menu-icon {
+        background: transparent;
+    }
+
+    body.nav-open .tbar-menu-icon::before {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    body.nav-open .tbar-menu-icon::after {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    /* The panel: closed it is not drawn and cannot be tabbed into. */
+    html body .tbar-links {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        width: auto !important;
+        max-height: calc(100vh - 64px) !important;
+        max-height: calc(100dvh - 64px) !important;
+        overflow-y: auto !important;
+        padding: 8px 12px 14px !important;
+        border-bottom: 1px solid rgba(151, 115, 255, 0.26);
+        background: #0d1040 !important;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition:
+            opacity 0.2s ease,
+            transform 0.2s ease,
+            visibility 0s linear 0.2s !important;
+    }
+
+    html body.nav-open .tbar-links {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0s !important;
+    }
+
+    html body .tbar-links a,
+    html body .tbar-motion-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 48px !important;
+        padding: 10px 16px !important;
+        font-size: 1.05rem !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.04em !important;
+        text-align: left !important;
+        border-radius: 12px !important;
+    }
+
+    html body .tbar-motion-toggle {
+        margin-top: 6px !important;
+        border-top: 1px solid rgba(151, 115, 255, 0.22);
+    }
+
+    .nav-scrim {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        background: rgba(3, 4, 20, 0.55);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+
+    body.nav-open .nav-scrim {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Room for the fixed bar; the old collapsed-bar offsets no longer apply. */
+    html body .page-content,
+    html body.loaded .page-content,
+    html body.loaded.tbar-collapsed .page-content,
+    html body.loaded:not(.tbar-collapsed) .page-content {
+        padding-top: 52px !important;
+    }
+
+    html body .page-section {
+        scroll-margin-top: 64px;
+    }
+}
+
+@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+    html body #tbar.tbar,
+    html body .tbar-links,
+    .tbar-menu-icon,
+    .tbar-menu-icon::before,
+    .tbar-menu-icon::after,
+    .nav-scrim {
+        transition: none !important;
+    }
+}
+
+/* The tutorial toolbar's single column was "1fr", which cannot shrink below
+   its widest content; the sort button's 165px minimum pushed the whole page
+   wider than a phone. */
+@media (max-width: 720px) {
+    .tutorial-toolbar {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tutorial-sort-button {
+        min-width: 0;
+    }
+
+    /* Hidden, the sort control would still keep its row (and a gap) under the
+       search box; closed it takes no height. */
+    .tutorial-sort-wrap.tutorial-sort-hidden {
+        height: 0;
+    }
+}
+
+/* The title's orbit ring is drawn wider than the screen on a phone. Clipping
+   it at the page edge stops the browser from widening the page to fit it
+   (which also shrank everything else and made the page scroll sideways; on a
+   desktop window it added a sideways scroll bar). */
+html body .page-content {
+    overflow-x: clip;
+}

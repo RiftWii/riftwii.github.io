@@ -278,8 +278,94 @@ if (tbarToggle) {
     });
 }
 
+// Phone and tablet menu (below 900px): the links sit in a panel under a slim
+// bar. It closes on a link, on a tap outside, on Escape and when the window
+// grows to the desktop layout, where the side bar shows the links itself.
+const navMenuButton = document.getElementById("navMenuButton");
+const navPanel = document.getElementById("navPanel");
+const compactNavQuery = window.matchMedia("(max-width: 900px)");
+const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function isNavOpen() {
+    return document.body.classList.contains("nav-open");
+}
+
+function setNavOpen(open, { returnFocus = false } = {}) {
+    document.body.classList.toggle("nav-open", open);
+
+    if (navMenuButton) {
+        navMenuButton.setAttribute("aria-expanded", String(open));
+    }
+
+    if (open) {
+        // An open menu has to be visible, whatever the scroll hid.
+        document.body.classList.remove("nav-hidden");
+    } else if (returnFocus && navMenuButton) {
+        navMenuButton.focus();
+    }
+}
+
+if (navMenuButton) {
+    navMenuButton.addEventListener("click", () => {
+        setNavOpen(!isNavOpen());
+    });
+
+    document.addEventListener("click", (event) => {
+        if (isNavOpen() && !tbar.contains(event.target)) {
+            setNavOpen(false);
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && isNavOpen()) {
+            setNavOpen(false, { returnFocus: true });
+        }
+    });
+
+    compactNavQuery.addEventListener("change", (event) => {
+        if (!event.matches) {
+            setNavOpen(false);
+            document.body.classList.remove("nav-hidden");
+        }
+    });
+}
+
+// The slim bar slides away while reading down the page and comes back on the
+// first scroll up, so it never covers the content for long. Not done for
+// reduced motion, or while the menu or a link in the bar has focus.
+let lastScrollY = window.scrollY;
+
+function updateNavVisibility() {
+    const currentY = window.scrollY;
+    const delta = currentY - lastScrollY;
+    const barHasFocus = tbar && tbar.contains(document.activeElement);
+
+    if (
+        !compactNavQuery.matches ||
+        reducedMotionQuery.matches ||
+        document.body.classList.contains("reduced-motion") ||
+        isNavOpen() ||
+        barHasFocus ||
+        currentY < 80
+    ) {
+        document.body.classList.remove("nav-hidden");
+    } else if (delta > 6) {
+        document.body.classList.add("nav-hidden");
+    } else if (delta < -6) {
+        document.body.classList.remove("nav-hidden");
+    }
+
+    if (Math.abs(delta) > 6) {
+        lastScrollY = currentY;
+    }
+}
+
+window.addEventListener("scroll", updateNavVisibility, { passive: true });
+
 navLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
+        setNavOpen(false);
+
         const sectionId = link.dataset.section;
         const section = document.getElementById(sectionId);
 
@@ -1000,12 +1086,36 @@ if (featuresToggle) {
 
 loadFeaturesMarkdown();
 
-setTimeout(() => {
+// The title intro lasts about a second and a half. Any tap, key press, click
+// or scroll attempt skips the rest of it, and it is skipped altogether when
+// the device asks for reduced motion, so nobody waits to start reading.
+const INTRO_MS = 1500;
+let introFinished = false;
+
+function finishIntro() {
+    if (introFinished) {
+        return;
+    }
+
+    introFinished = true;
     document.body.classList.add("loaded");
     document.body.classList.remove("page-locked");
     startBoxReveals();
     updateScrollSpy();
-}, 2000);
+}
+
+const introTimer = setTimeout(finishIntro, reducedMotionQuery.matches ? 0 : INTRO_MS);
+
+["pointerdown", "keydown", "wheel", "touchstart"].forEach((eventName) => {
+    window.addEventListener(
+        eventName,
+        () => {
+            clearTimeout(introTimer);
+            finishIntro();
+        },
+        { once: true, passive: true }
+    );
+});
 
 
 
@@ -1572,7 +1682,9 @@ function setReducedMotion(enabled) {
     updateMotionToggle();
 }
 
-document.body.classList.remove("reduced-motion");
+// Start with animations off when the device asks for less motion; the button
+// in the menu can still turn them on.
+document.body.classList.toggle("reduced-motion", reducedMotionQuery.matches);
 updateMotionToggle();
 
 if (motionToggle) {
