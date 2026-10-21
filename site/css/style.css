@@ -1434,7 +1434,7 @@ body.loaded .hero-intro {
     margin-bottom: 0;
 }
 
-body.loaded #features .content-shell {
+body.loaded #download .content-shell {
     padding-top: 14px;
 }
 
@@ -3769,4 +3769,125 @@ body.reduced-motion .tutorial-list {
    desktop window it added a sideways scroll bar). */
 html body .page-content {
     overflow-x: clip;
+}
+
+/* ------------------------------------------------------------------
+   Phone and tablet typography and spacing (900px and below)
+
+   The desktop sizes (a 24px spaced-out kicker, 22px headings, 1.7 line
+   height, 30px panel padding, 100px under every section) made a phone page
+   very long. Normal mobile sizes: 15px text, 19px headings, a 13px kicker.
+   This block comes after the older rules and uses "html body" selectors so
+   it wins over their !important overrides.
+   ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+    html body .box-kicker {
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+        letter-spacing: 0.2em;
+    }
+
+    html body .content-box h2 {
+        margin-bottom: 10px;
+        font-size: 1.25rem;
+        line-height: 1.25;
+    }
+
+    html body .content-box p,
+    html body .credits-notice {
+        font-size: 0.94rem;
+        line-height: 1.55;
+    }
+
+    html body .content-shell,
+    html body.loaded .content-shell,
+    html body.loaded #download .content-shell {
+        padding: 12px 0 28px;
+    }
+
+    html body .content-box,
+    html body .intro-box {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    html body .welcome {
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    html body .mod-loader {
+        margin-top: 16px;
+        font-size: 0.75rem;
+    }
+
+    html body .riftwii {
+        font-size: 2.6rem;
+    }
+
+    html body .hero,
+    html body.loaded .hero {
+        padding-bottom: 6px !important;
+    }
+
+    html body .features-grid {
+        gap: 12px;
+        margin-top: 16px;
+    }
+
+    html body .feature-group {
+        padding: 14px;
+        border-radius: 14px;
+    }
+
+    html body .feature-group h3 {
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+
+    html body .feature-group li {
+        margin: 5px 0;
+        font-size: 0.92rem;
+        line-height: 1.45;
+    }
+
+    html body .placeholder-image {
+        margin-bottom: 14px;
+        border-radius: 12px;
+    }
+
+    html body .release-card h3 {
+        margin-bottom: 8px;
+        font-size: 1.15rem;
+    }
+
+    html body .release-button,
+    html body .content-link,
+    html body .download-button {
+        margin-top: 14px;
+    }
+
+    html body .site-footer {
+        margin-top: 8px;
+    }
+}
+
+/* Screenshots are a grid, not one tall list: three columns on a tablet, two
+   on a phone (down to 320px), the same gap everywhere. */
+@media (max-width: 900px) {
+    html body .grid-image {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin: 12px 0 16px;
+    }
+
+    html body .grid-image img {
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 599px) {
+    html body .grid-image {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
