@@ -3871,3 +3871,23 @@ html body .page-content {
         margin-top: 8px;
     }
 }
+
+/* Screenshots are a grid, not one tall list: three columns on a tablet, two
+   on a phone (down to 320px), the same gap everywhere. */
+@media (max-width: 900px) {
+    html body .grid-image {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin: 12px 0 16px;
+    }
+
+    html body .grid-image img {
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 599px) {
+    html body .grid-image {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
