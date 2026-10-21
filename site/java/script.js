@@ -432,21 +432,14 @@ const tutorialSortWrap = tutorialSortButton
 
 const FEATURED_TUTORIALS = [
     "getting-started.html",
-    "installing-mods.html",
-    "troubleshooting.html"
+    "installing-mods.html"
 ];
-
-const TUTORIAL_REPO_FALLBACK = {
-    owner: "KakarottoCake",
-    repo: "Riftwii"
-};
 
 const TUTORIAL_FALLBACK_FILES = [
     "getting-started.html",
     "installing-mods.html",
     "send-a-problem-report.html",
     "updating-riftwii.html",
-    "using-a-usb-disc-drive.html",
     "virtual-sd-cards.html",
     "developers.html"
 ];
@@ -520,54 +513,6 @@ async function scanTutorialJson() {
     }
 
     return files;
-}
-
-function getGitHubRepositoryFromPage() {
-    const hostname = window.location.hostname.toLowerCase();
-
-    if (hostname.endsWith(".github.io")) {
-        const owner = hostname.split(".")[0];
-        const segments = window.location.pathname
-            .split("/")
-            .filter(Boolean);
-
-        const repo = segments.length
-            ? segments[0]
-            : `${owner}.github.io`;
-
-        return { owner, repo };
-    }
-
-    return TUTORIAL_REPO_FALLBACK;
-}
-
-async function scanTutorialGitHubFolder() {
-    const { owner, repo } = getGitHubRepositoryFromPage();
-
-    const endpoint =
-        `https://api.github.com/repos/${encodeURIComponent(owner)}/` +
-        `${encodeURIComponent(repo)}/contents/gitpage/tutorials`;
-
-    const response = await fetch(endpoint, {
-        headers: {
-            "Accept": "application/vnd.github+json"
-        },
-        cache: "no-store"
-    });
-
-    if (!response.ok) {
-        throw new Error("GitHub tutorials request failed");
-    }
-
-    const contents = await response.json();
-
-    if (!Array.isArray(contents)) {
-        throw new Error("Unexpected GitHub tutorials response");
-    }
-
-    return contents
-        .filter((item) => item.type === "file" && /\.html?$/i.test(item.name))
-        .map((item) => item.name);
 }
 
 function sortTutorials(items) {
