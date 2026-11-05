@@ -1,0 +1,216 @@
+<!-- SPDX-FileCopyrightText: 2026 RiftWii contributors -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compatibility - RiftWii</title>
+    <meta name="description" content="Which games run in RiftWii, as reported by players.">
+    <link rel="stylesheet" href="css/lightbox.css?v=20261021-6">
+    <link rel="stylesheet" href="css/style.css?v=20261105-1">
+
+    <meta property="og:title" content="RiftWii Compatibility">
+    <meta
+        property="og:description"
+        content="Which games run in RiftWii, as reported by players."
+    >
+    <meta property="og:type" content="website">
+    <meta
+        property="og:image"
+        content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+    >
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RiftWii Compatibility">
+    <meta
+        name="twitter:description"
+        content="Which games run in RiftWii, as reported by players."
+    >
+    <meta
+        name="twitter:image"
+        content="https://github.com/KakarottoCake/Riftwii/raw/main/docs/images/banner.png"
+    >
+    <link
+        rel="icon"
+        type="image/png"
+        href="https://github.com/KakarottoCake/Riftwii/blob/main/hbc/icon.png?raw=true"
+    >
+</head>
+<!-- "loaded" from the start: this page has no title intro, so the navigation bar and the panels are there at once. -->
+<body class="loaded compatibility-page">
+    <div class="background">
+        <div class="haze-main"></div>
+        <div class="mist haze-1"></div>
+        <div class="mist haze-2"></div>
+        <div class="stars" id="stars"></div>
+    </div>
+
+    <aside class="tbar delayed-ui" id="tbar" aria-label="Primary navigation">
+        <button
+            class="tbar-toggle"
+            id="tbarToggle"
+            type="button"
+            aria-label="Hide navigation"
+            aria-expanded="true"
+        >
+            <span class="tbar-arrow">‹</span>
+        </button>
+
+        <div class="tbar-brand">RIFTWII<span class="tbar-brand-extra"> NAVI</span></div>
+
+        <button
+            class="tbar-menu-button"
+            id="navMenuButton"
+            type="button"
+            aria-label="Menu"
+            aria-expanded="false"
+            aria-controls="navPanel"
+        >
+            <span class="tbar-menu-icon" aria-hidden="true"></span>
+            <span class="tbar-menu-text">Menu</span>
+        </button>
+
+        <nav class="tbar-links" id="navPanel" aria-label="Sections">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#download">Download</a>
+            <a href="themes.html">Themes</a>
+            <a class="active" href="compatibility.html" aria-current="page">Compatibility</a>
+            <a href="index.html#features">Features</a>
+            <a href="index.html#tutorials">Tutorials</a>
+            <a href="index.html#socials">Socials</a>
+            <a href="index.html#credits">Credits</a>
+
+            <button
+                class="tbar-motion-toggle"
+                id="motionToggle"
+                type="button"
+                aria-pressed="false"
+            >
+                Animations: On
+            </button>
+        </nav>
+    </aside>
+    <div class="nav-scrim" id="navScrim" aria-hidden="true"></div>
+
+    <main class="page-content">
+        <section class="page-section compatibility-top" id="top">
+            <div class="content-shell">
+                <article class="content-box intro-box section-box reveal-box">
+                    <span class="box-kicker">RIFTWII</span>
+                    <h1>Game compatibility</h1>
+                    <p>
+                        Players report how each game runs in RiftWii. Results from Dolphin are kept apart from results on real consoles.
+                    </p>
+                    <div class="themes-actions">
+                        <a class="download-button" href="https://github.com/RiftWii/compatibility/issues/new?template=report.yml" target="_blank" rel="noopener noreferrer">Report a game</a>
+                        <a class="download-button" href="#list">Browse the list</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-section" id="list">
+            <div class="content-shell">
+                <article class="content-box section-box reveal-box">
+                    <span class="box-kicker">GAMES</span>
+                    <h2>How games run</h2>
+                    <p id="compatCount">Loading the list…</p>
+
+                    <div class="tutorial-browser">
+                        <div class="tutorial-search-wrap">
+                            <input
+                                class="tutorial-search"
+                                id="compatSearch"
+                                type="search"
+                                placeholder="Search by name or Game ID"
+                                aria-label="Search games"
+                                hidden
+                            >
+                        </div>
+                        <div class="compat-filters" role="group" aria-label="Filters">
+                            <div class="compat-filter">
+                                <label for="compatStatus">Status</label>
+                                <select id="compatStatus" aria-label="Filter by status">
+                                    <option value="all">All</option>
+                                    <option value="Perfect">Perfect</option>
+                                    <option value="Playable">Playable</option>
+                                    <option value="Has problems">Has problems</option>
+                                    <option value="Won't start">Won't start</option>
+                                    <option value="dolphin-only">Dolphin only</option>
+                                </select>
+                            </div>
+                            <div class="compat-filter">
+                                <label for="compatType">Game type</label>
+                                <select id="compatType" aria-label="Filter by game type">
+                                    <option value="all">All</option>
+                                    <option value="Wii">Wii</option>
+                                    <option value="GameCube">GameCube</option>
+                                    <option value="Channel / WiiWare / VC">Channel</option>
+                                </select>
+                            </div>
+                            <div class="compat-filter">
+                                <label for="compatConsole">Console</label>
+                                <select id="compatConsole" aria-label="Filter by console">
+                                    <option value="all">All</option>
+                                    <option value="Wii">Wii</option>
+                                    <option value="Wii mini">Wii mini</option>
+                                    <option value="Wii U (vWii)">Wii U (vWii)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="compatList" aria-live="polite"></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="page-section" id="report">
+            <div class="content-shell">
+                <article class="content-box section-box reveal-box">
+                    <span class="box-kicker">REPORT</span>
+                    <h2>How to report</h2>
+                    <p>Reports come from players, one form per game and setup.</p>
+
+                    <div class="theme-steps">
+                        <div class="theme-step">
+                            <h3>Open the form</h3>
+                            <p>Fill in the <a href="https://github.com/RiftWii/compatibility/issues/new?template=report.yml" target="_blank" rel="noopener noreferrer">report form</a> for the game you tried.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>One report per setup</h3>
+                            <p>Send one report per game and setup. If you tried the same game on two consoles, send two reports.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Pick a status</h3>
+                            <p>Perfect: no problems found. Playable: small problems, can be finished. Has problems: big problems, crashes or can't be finished. Won't start: never gets in-game.</p>
+                        </div>
+                        <div class="theme-step">
+                            <h3>Where to find things</h3>
+                            <p>The Game ID is on the game's page in RiftWii. Write the RiftWii version and cIOS as RiftWii shows them. For a crash, attach a problem report from <strong>Settings &gt; Help &gt; Send a problem report</strong> (<a href="tutorials/send-a-problem-report.html">how to send one</a>).</p>
+                        </div>
+                    </div>
+
+                    <p class="themes-note">
+                        Don't post personal info. CISO files aren't supported: convert to ISO or RVZ in Dolphin first. Without a GitHub account, a Discord route is coming.
+                    </p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-main">
+                <span class="footer-label">Website by</span>
+                <span class="footer-author">Ｄｉａ！♪～☆</span>
+            </div>
+            <div class="footer-year">
+                RiftWii 2026 · Not affiliated with Nintendo
+            </div>
+        </div>
+    </footer>
+
+    <script src="java/script.js?v=20261105-2"></script>
+<script src="java/lightbox.js?v=20261021-6"></script>
+</body>
+</html>

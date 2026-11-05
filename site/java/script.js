@@ -7,7 +7,11 @@ if ("scrollRestoration" in history) {
 // A link from another page (the Themes page's "Features", say) arrives as
 // index.html#features. The page always starts at the top for its intro, so
 // the section is remembered here and scrolled to once the intro is over.
-const requestedSectionId = decodeURIComponent(window.location.hash.slice(1));
+// A search shared with it (#list?q=..., the Compatibility page) isn't part of
+// the section's name.
+const requestedSectionId = decodeURIComponent(window.location.hash.slice(1).split("?")[0]);
+// The Compatibility page reads its shared search from the raw hash as it arrived.
+const requestedHash = window.location.hash;
 
 if (window.location.hash) {
     history.replaceState(
@@ -1923,4 +1927,263 @@ if (motionToggle) {
         });
 
     search.addEventListener("input", render);
+})();
+
+
+// The Compatibility page: fills the game list from data.json. The reports
+// live in their own repository (RiftWii/compatibility), which GitHub serves
+// under this same address, at /compatibility/, so the list is same-origin.
+// Every value from the file is put in with textContent or checked URLs,
+// never as HTML.
+(function () {
+    "use strict";
+
+    const list = document.getElementById("compatList");
+    const count = document.getElementById("compatCount");
+    const search = document.getElementById("compatSearch");
+    const statusFilter = document.getElementById("compatStatus");
+    const typeFilter = document.getElementById("compatType");
+    const consoleFilter = document.getElementById("compatConsole");
+
+    if (!list || !count || !search || !statusFilter || !typeFilter || !consoleFilter) {
+        return;
+    }
+
+    // Opened from this computer (a local copy of the site, to work on the
+    // page), /compatibility/ is looked for next to the page instead.
+    const localPreview = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+    const dataJsonUrl = localPreview
+        ? location.origin + "/compatibility/data.json"
+        : "https://riftwii.github.io/compatibility/data.json";
+
+    let games = [];
+
+    function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+    }
+
+    // Only links back to a report are used, so a bad entry can't point
+    // the list somewhere else.
+    function reportUrl(value) {
+        if (typeof value !== "string") return null;
+        return value.startsWith("https://github.com/") ? value : null;
+    }
+
+    function shortType(platform) {
+        if (platform === "Channel / WiiWare / VC") return "Channel";
+        return platform || "";
+    }
+
+    function pillClass(status) {
+        if (status === "Perfect") return "compat-pill compat-pill-perfect";
+        if (status === "Playable") return "compat-pill compat-pill-playable";
+        if (status === "Has problems") return "compat-pill compat-pill-problems";
+        if (status === "Won't start") return "compat-pill compat-pill-wont-start";
+        return "compat-pill";
+    }
+
+    function reportsText(game) {
+        const consoleCount = typeof game.console_count === "number" ? game.console_count : 0;
+        const dolphinCount = typeof game.dolphin_count === "number" ? game.dolphin_count : 0;
+        if (consoleCount > 0 && dolphinCount > 0) {
+            return consoleCount + (consoleCount === 1 ? " report" : " reports") + " + " + dolphinCount + " Dolphin";
+        }
+        if (consoleCount > 0) {
+            return consoleCount + (consoleCount === 1 ? " report" : " reports");
+        }
+        if (dolphinCount > 0) {
+            return dolphinCount + " Dolphin";
+        }
+        return "No reports yet";
+    }
+
+    // A search can be shared with #q=..., next to the #list anchor.
+    function getQueryFromHash(hash = location.hash || "") {
+        const at = hash.indexOf("q=");
+        if (at === -1) return "";
+        let raw = hash.slice(at + 2);
+        const amp = raw.indexOf("&");
+        if (amp !== -1) raw = raw.slice(0, amp);
+        try {
+            return decodeURIComponent(raw.replace(/\+/g, " "));
+        } catch (e) {
+            return "";
+        }
+    }
+
+    // Keep the #list anchor working: a search next to it stays as
+    // #list?q=..., otherwise it stays as #q=....
+    function writeQueryToHash(query, hasList = (location.hash || "").startsWith("#list")) {
+        if (!query) {
+            // Leave a plain #list anchor alone; only clear a #q= hash.
+            if ((location.hash || "").includes("q=")) {
+                history.replaceState(null, "", hasList ? "#list" : location.pathname + location.search);
+            }
+            return;
+        }
+        const next = hasList ? "#list?q=" + encodeURIComponent(query) : "#q=" + encodeURIComponent(query);
+        if (location.hash !== next) history.replaceState(null, "", next);
+    }
+
+    function card(game) {
+        const article = el("article", "compat-card");
+
+        article.appendChild(el("h3", null, game.game_name || game.game_id || "Unknown game"));
+        if (game.game_id) article.appendChild(el("p", "compat-id", game.game_id));
+
+        const meta = el("div", "compat-meta");
+        const type = shortType(game.platform);
+        if (type) meta.appendChild(el("span", "compat-type", type));
+        if (game.status) meta.appendChild(el("span", pillClass(game.status), game.status));
+        if (game.dolphin_only) meta.appendChild(el("span", "compat-dolphin-only", "Dolphin only"));
+        article.appendChild(meta);
+
+        article.appendChild(el("p", "compat-reports", reportsText(game)));
+        if (game.newest_version) {
+            article.appendChild(el("p", "compat-version", "Newest version " + game.newest_version));
+        }
+
+        const reports = Array.isArray(game.reports) ? game.reports : [];
+        if (reports.length > 0) {
+            const details = el("details", "compat-details");
+            details.appendChild(el("summary", null, "Reports"));
+            const items = el("ul", "compat-report-list");
+            reports.forEach((report) => {
+                const parts = [];
+                if (report.status) parts.push(report.status);
+                if (report.version) parts.push(report.version);
+                if (report.console) parts.push(report.console);
+                const label = parts.join(" \u00b7 ") || "Report";
+                const item = el("li");
+                const link = reportUrl(report.url);
+                if (link) {
+                    const anchor = el("a", null, label);
+                    anchor.href = link;
+                    anchor.target = "_blank";
+                    anchor.rel = "noopener noreferrer";
+                    item.appendChild(anchor);
+                } else {
+                    item.appendChild(el("span", null, label));
+                }
+                items.appendChild(item);
+            });
+            details.appendChild(items);
+            article.appendChild(details);
+        }
+
+        return article;
+    }
+
+    function emptyState() {
+        const box = el("div", "compat-empty");
+        box.appendChild(el("h3", null, "No reports yet."));
+        box.appendChild(el("p", null, "Be the first to report a game in RiftWii."));
+        const report = el("a", "download-button", "Report a game");
+        report.href = "https://github.com/RiftWii/compatibility/issues/new?template=report.yml";
+        report.target = "_blank";
+        report.rel = "noopener noreferrer";
+        box.appendChild(report);
+        return box;
+    }
+
+    function render() {
+        const query = search.value.trim().toLowerCase();
+        const statusValue = statusFilter.value;
+        const typeValue = typeFilter.value;
+        const consoleValue = consoleFilter.value;
+
+        const shown = games.filter((game) => {
+            if (query) {
+                const hay = ((game.game_name || "") + " " + (game.game_id || "")).toLowerCase();
+                if (!hay.includes(query)) return false;
+            }
+            if (statusValue === "dolphin-only") {
+                if (!game.dolphin_only) return false;
+            } else if (statusValue !== "all") {
+                if (game.status !== statusValue) return false;
+            }
+            if (typeValue !== "all" && game.platform !== typeValue) return false;
+            if (consoleValue !== "all") {
+                const consoles = Array.isArray(game.consoles) ? game.consoles : [];
+                if (!consoles.includes(consoleValue)) return false;
+            }
+            return true;
+        });
+
+        list.textContent = "";
+        if (games.length === 0) {
+            count.textContent = "No games have been reported yet.";
+            list.appendChild(emptyState());
+            return;
+        }
+        if (shown.length === 0) {
+            count.textContent = "No games match these filters.";
+            if (query) {
+                list.appendChild(el("p", "compat-status", "No game matches \u201c" + search.value.trim() + "\u201d."));
+            } else {
+                list.appendChild(el("p", "compat-status", "No games match these filters."));
+            }
+            return;
+        }
+        count.textContent = "Showing " + shown.length + " of " + games.length + " " + (games.length === 1 ? "game" : "games");
+        const grid = el("div", "compat-grid");
+        shown.forEach((game) => grid.appendChild(card(game)));
+        list.appendChild(grid);
+    }
+
+    try {
+        const initial = getQueryFromHash(location.hash || requestedHash);
+        if (initial) {
+            search.value = initial;
+            writeQueryToHash(initial, requestedHash.startsWith("#list"));
+        }
+    } catch (e) {
+        // Keep the empty search box when the hash can't be read.
+    }
+
+    fetch(dataJsonUrl, { cache: "no-cache" })
+        .then((response) => {
+            if (!response.ok) throw new Error(response.status);
+            return response.json();
+        })
+        .then((data) => {
+            games = Array.isArray(data) ? data.slice() : [];
+            games.sort((a, b) =>
+                (a.game_name || "").localeCompare(b.game_name || "")
+            );
+            search.hidden = games.length < 2;
+            render();
+            if ((location.hash || requestedHash).startsWith("#list")) {
+                const target = document.getElementById("list");
+                if (target) target.scrollIntoView();
+            }
+        })
+        .catch(() => {
+            count.textContent = "";
+            list.textContent = "";
+            const message = el("p", "compat-status", "The compatibility list didn't load. ");
+            const link = el("a", null, "Open data.json");
+            link.href = dataJsonUrl;
+            message.appendChild(link);
+            list.appendChild(message);
+        });
+
+    search.addEventListener("input", () => {
+        writeQueryToHash(search.value.trim());
+        render();
+    });
+    statusFilter.addEventListener("change", render);
+    typeFilter.addEventListener("change", render);
+    consoleFilter.addEventListener("change", render);
+    window.addEventListener("hashchange", () => {
+        if (!(location.hash || "").includes("q=")) return;
+        const fromHash = getQueryFromHash();
+        if (fromHash !== search.value) {
+            search.value = fromHash;
+            render();
+        }
+    });
 })();
