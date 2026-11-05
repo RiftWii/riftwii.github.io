@@ -4649,7 +4649,8 @@ html body .page-content {
 }
 
 
-.themes-image {
+.themes-image,
+.compat-image {
     display: block;
     width: 100%;
     height: auto;
