@@ -4647,3 +4647,14 @@ html body .page-content {
         border-radius: clamp(9px, 1.8vh, 13px) !important;
     }
 }
+
+
+.themes-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    margin: 20px 0;
+    object-fit: contain;
+    border-radius: 14px;
+}

@@ -26,6 +26,22 @@ Contributor
 dia.png
 mc
 
+# grantendo
+Contributor
+grantendo.jpg
+mc
+
+# quatric
+Contributor
+quatric.jpg
+mc
+
+# cyanpurr
+Contributor
+cyan.jpg
+mc
+
+
 <!-- writing mc under an entry shows it when the list is condensed -->
 
 # Our Amazing Community
