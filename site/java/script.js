@@ -7,7 +7,11 @@ if ("scrollRestoration" in history) {
 // A link from another page (the Themes page's "Features", say) arrives as
 // index.html#features. The page always starts at the top for its intro, so
 // the section is remembered here and scrolled to once the intro is over.
-const requestedSectionId = decodeURIComponent(window.location.hash.slice(1));
+// A search shared with it (#list?q=..., the Compatibility page) isn't part of
+// the section's name.
+const requestedSectionId = decodeURIComponent(window.location.hash.slice(1).split("?")[0]);
+// The Compatibility page reads its shared search from the raw hash as it arrived.
+const requestedHash = window.location.hash;
 
 if (window.location.hash) {
     history.replaceState(
@@ -1997,8 +2001,7 @@ if (motionToggle) {
     }
 
     // A search can be shared with #q=..., next to the #list anchor.
-    function getQueryFromHash() {
-        const hash = location.hash || "";
+    function getQueryFromHash(hash = location.hash || "") {
         const at = hash.indexOf("q=");
         if (at === -1) return "";
         let raw = hash.slice(at + 2);
@@ -2013,8 +2016,7 @@ if (motionToggle) {
 
     // Keep the #list anchor working: a search next to it stays as
     // #list?q=..., otherwise it stays as #q=....
-    function writeQueryToHash(query) {
-        const hasList = (location.hash || "").startsWith("#list");
+    function writeQueryToHash(query, hasList = (location.hash || "").startsWith("#list")) {
         if (!query) {
             // Leave a plain #list anchor alone; only clear a #q= hash.
             if ((location.hash || "").includes("q=")) {
@@ -2133,8 +2135,11 @@ if (motionToggle) {
     }
 
     try {
-        const initial = getQueryFromHash();
-        if (initial) search.value = initial;
+        const initial = getQueryFromHash(location.hash || requestedHash);
+        if (initial) {
+            search.value = initial;
+            writeQueryToHash(initial, requestedHash.startsWith("#list"));
+        }
     } catch (e) {
         // Keep the empty search box when the hash can't be read.
     }
@@ -2151,7 +2156,7 @@ if (motionToggle) {
             );
             search.hidden = games.length < 2;
             render();
-            if ((location.hash || "").startsWith("#list")) {
+            if ((location.hash || requestedHash).startsWith("#list")) {
                 const target = document.getElementById("list");
                 if (target) target.scrollIntoView();
             }
