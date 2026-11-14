@@ -1806,6 +1806,14 @@ if (motionToggle) {
     function ownUrl(value) {
         try {
             const url = new URL(value, themesJsonUrl);
+            // themes.json bakes absolute riftwii.github.io URLs for the preview
+            // images and the zips. Since the site moved to riftwii.com, that host
+            // only redirects here, so point those at this origin instead (GitHub
+            // serves the themes repo's Pages under this same address, so the path
+            // is unchanged). Other cross-origin URLs are still refused.
+            if (url.hostname === "riftwii.github.io") {
+                return location.origin + url.pathname + url.search;
+            }
             return url.origin === location.origin ? url.href : null;
         } catch (e) {
             return null;
