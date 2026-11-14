@@ -1805,7 +1805,10 @@ if (motionToggle) {
     // a download or an image somewhere else.
     function ownUrl(value) {
         try {
-            const url = new URL(value, themesJsonUrl);
+            // Use an absolute base: themesJsonUrl is a site-relative path
+            // ("/themes/themes.json"), which new URL() rejects as a base, so the
+            // whole function threw and every asset came back null.
+            const url = new URL(value, location.href);
             // themes.json bakes absolute riftwii.github.io URLs for the preview
             // images and the zips. Since the site moved to riftwii.com, that host
             // only redirects here, so point those at this origin instead (GitHub
