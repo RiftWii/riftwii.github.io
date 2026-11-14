@@ -1785,12 +1785,12 @@ if (motionToggle) {
         return;
     }
 
-    // Opened from this computer (a local copy of the site, to work on the
-    // page), /themes/ is looked for next to the page instead.
-    const localPreview = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
-    const themesJsonUrl = localPreview
-        ? location.origin + "/themes/themes.json"
-        : "https://riftwii.github.io/themes/themes.json";
+    // The themes repository's Pages are served under this same address
+    // (riftwii.com/themes/), so the file is fetched from this origin. The
+    // old riftwii.github.io address only redirects there, and that redirect has no
+    // CORS header, so a browser refuses it. The same path also works on a local
+    // copy of the site.
+    const themesJsonUrl = "/themes/themes.json";
 
     let themes = [];
 
@@ -1949,12 +1949,12 @@ if (motionToggle) {
         return;
     }
 
-    // Opened from this computer (a local copy of the site, to work on the
-    // page), /compatibility/ is looked for next to the page instead.
-    const localPreview = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
-    const dataJsonUrl = localPreview
-        ? location.origin + "/compatibility/data.json"
-        : "https://riftwii.github.io/compatibility/data.json";
+    // The compatibility repository's Pages are served under this same address
+    // (riftwii.com/compatibility/), so the file is fetched from this origin. The
+    // old riftwii.github.io address only redirects there, and that redirect has no
+    // CORS header, so a browser refuses it. The same path also works on a local
+    // copy of the site.
+    const dataJsonUrl = "/compatibility/data.json";
 
     let games = [];
 
